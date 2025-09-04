@@ -692,7 +692,7 @@
             I hope they can <span>inspire</span> or help someone out there.
         </p>
         <div class="time-display">
-            <span class="timezone">東京 JST</span>
+            <span class="timezone">Yogyakarta WIB</span>
             <span class="current-time" id="clock">00:00:00 AM</span>
         </div>
     </section>
@@ -766,16 +766,16 @@
     <script>
         // Clock
         function updateClock() {
-            const now = new Date();
-            const tokyoTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Tokyo"}));
-            const hours = tokyoTime.getHours();
-            const minutes = tokyoTime.getMinutes().toString().padStart(2, '0');
-            const seconds = tokyoTime.getSeconds().toString().padStart(2, '0');
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            const displayHours = hours % 12 || 12;
-            
-            document.getElementById('clock').textContent = `${displayHours}:${minutes}:${seconds} ${ampm}`;
-        }
+    const now = new Date();
+    const jakartaTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Jakarta"}));
+    const hours = jakartaTime.getHours();
+    const minutes = jakartaTime.getMinutes().toString().padStart(2, '0');
+    const seconds = jakartaTime.getSeconds().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12;
+    
+    document.getElementById('clock').textContent = `${displayHours}:${minutes}:${seconds} ${ampm}`;
+}
         setInterval(updateClock, 1000);
         updateClock();
 
