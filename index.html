@@ -734,29 +734,46 @@
         <div class="grid" id="gridContainer"></div>
     </section>
 
-    <!-- Modal -->
+    <!-- Modal Popup -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
-            <div class="modal-close" id="modalClose">×</div>
+            <div class="modal-close" id="modalClose"></div>
             <div class="modal-header">
-                <h2 id="modalTitle">Project Title</h2>
+                <div class="modal-title">
+                    <span class="modal-id" id="modalId">ID 001</span>
+                    <span class="modal-date" id="modalDate">2022/08/30</span>
+                </div>
+                <div class="modal-subtitle">Creative Exploration & Design Process</div>
+                <div class="modal-stats">
+                    <div class="modal-stat">
+                        <span class="modal-stat-label">Views</span>
+                        <span class="modal-stat-value" id="modalViews">1.2K</span>
+                    </div>
+                    <div class="modal-stat">
+                        <span class="modal-stat-label">Likes</span>
+                        <span class="modal-stat-value" id="modalLikes">234</span>
+                    </div>
+                    <div class="modal-stat">
+                        <span class="modal-stat-label">Category</span>
+                        <span class="modal-stat-value" id="modalCategory">Design</span>
+                    </div>
+                </div>
             </div>
             <div class="modal-body">
-                <div class="gallery-main">
-                    <img src="https://placehold.co/800x400" alt="Gallery" id="galleryMainImg">
+                <div class="modal-preview" id="modalPreview">
+                    <!-- Preview content -->
                 </div>
-                <div class="gallery-thumbnails" id="galleryThumbs"></div>
+                <div class="modal-description">
+                    <p>This piece represents an exploration into the intersection of design and technology. Through iterative processes and creative experimentation, this work pushes the boundaries of what's possible in digital art.</p>
+                    <p>The project involved extensive research, prototyping, and refinement to achieve the final result. Each element was carefully crafted to create a cohesive and impactful visual experience.</p>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-button">View Full Project</button>
+                    <button class="modal-button secondary">Share</button>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Lightbox -->
-    <div class="lightbox" id="lightbox">
-        <div class="lightbox-content">
-            <div class="lightbox-close" id="lightboxClose">×</div>
-            <img src="" alt="Lightbox" id="lightboxImg">
-        </div>
-    </div>
+    </div>    
 
     <!-- Footer -->
     <footer class="footer">
@@ -954,59 +971,39 @@
             gridContainer.innerHTML = '';
             items.forEach(item => gridContainer.appendChild(item));
         });
-
         // Modal functionality
         const modalOverlay = document.getElementById('modalOverlay');
         const modalClose = document.getElementById('modalClose');
-        const modalTitle = document.getElementById('modalTitle');
-        const galleryMainImg = document.getElementById('galleryMainImg');
-        const galleryThumbs = document.getElementById('galleryThumbs');
-        
-        let currentImages = [];
-        let currentImageIndex = 0;
-        
-        function openModal(project) {
-            modalTitle.textContent = `${project.title} - ID ${project.id}`;
-            
-            // Generate dummy images for gallery
-            currentImages = [];
-            for (let i = 0; i < project.images; i++) {
-                currentImages.push(`https://placehold.co/800x400/${Math.floor(Math.random()*16777215).toString(16)}/ffffff?text=Image+${i+1}`);
-            }
-            
-            currentImageIndex = 0;
-            galleryMainImg.src = currentImages[0];
-            
-            // Create thumbnails
-            galleryThumbs.innerHTML = '';
-            currentImages.forEach((img, index) => {
-                const thumb = document.createElement('div');
-                thumb.className = `gallery-thumb ${index === 0 ? 'active' : ''}`;
-                thumb.innerHTML = `<img src="${img}" alt="Thumbnail ${index + 1}">`;
-                thumb.addEventListener('click', () => {
-                    currentImageIndex = index;
-                    updateGallery();
-                });
-                galleryThumbs.appendChild(thumb);
-            });
+
+        function openModal(item, index) {
+            document.getElementById('modalId').textContent = `ID ${item.id}`;
+            document.getElementById('modalDate').textContent = item.date;
+            document.getElementById('modalViews').textContent = item.views > 1000 ? 
+                (item.views / 1000).toFixed(1) + 'K' : item.views;
+            document.getElementById('modalLikes').textContent = item.likes;
+            document.getElementById('modalCategory').textContent = item.category;
+            document.getElementById('modalPreview').style.background = gradients[index % gradients.length];
+            document.getElementById('modalPreview').innerHTML = shapes[index % shapes.length];
             
             modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
-        
-        function updateGallery() {
-            galleryMainImg.src = currentImages[currentImageIndex];
-            document.querySelectorAll('.gallery-thumb').forEach((thumb, index) => {
-                thumb.classList.toggle('active', index === currentImageIndex);
-            });
-        }
-        
-        modalClose.addEventListener('click', () => {
+
+        function closeModal() {
             modalOverlay.classList.remove('active');
-        });
-        
+            document.body.style.overflow = '';
+        }
+
+        modalClose.addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', (e) => {
             if (e.target === modalOverlay) {
-                modalOverlay.classList.remove('active');
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                closeModal();
             }
         });
         
