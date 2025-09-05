@@ -1278,42 +1278,6 @@
             
             noResults.classList.toggle('active', visibleCount === 0 && searchTerm);
         });
-        
-        // Modal functionality
-        const modalOverlay = document.getElementById('modalOverlay');
-        const modalClose = document.getElementById('modalClose');
-
-        function openModal(item, index) {
-            document.getElementById('modalId').textContent = `ID ${item.id}`;
-            document.getElementById('modalDate').textContent = item.date;
-            document.getElementById('modalViews').textContent = item.views > 1000 ? 
-                (item.views / 1000).toFixed(1) + 'K' : item.views;
-            document.getElementById('modalLikes').textContent = item.likes;
-            document.getElementById('modalCategory').textContent = item.category;
-            document.getElementById('modalPreview').style.background = gradients[index % gradients.length];
-            document.getElementById('modalPreview').innerHTML = shapes[index % shapes.length];
-            
-            modalOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            modalOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        modalClose.addEventListener('click', closeModal);
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) {
-                closeModal();
-            }
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-                closeModal();
-            }
-        });
 
         // Filter functionality
         const filterTags = document.querySelectorAll('.filter-tag');
