@@ -889,13 +889,13 @@
     <!-- Enhanced Modal -->
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal-content">
-        <div class="modal-close" id="modalClose"></div>
+        <div class="modal-close" id="modalClose">×</div>
         <div class="modal-header">
-            <div class="modal-title">
+            <div class="modal-title-section">
                 <span class="modal-id" id="modalId">ID 001</span>
                 <span class="modal-date" id="modalDate">2024/01/15</span>
             </div>
-            <div class="modal-subtitle" id="modalSubtitle">Creative Exploration & Design Process</div>
+            <h2 id="modalTitle">Project Title</h2>
             <div class="modal-stats">
                 <div class="modal-stat">
                     <span class="modal-stat-label">Views</span>
@@ -916,16 +916,9 @@
                 <img src="https://placehold.co/800x400" alt="Gallery" id="galleryMainImg">
             </div>
             <div class="gallery-thumbnails" id="galleryThumbs"></div>
-            <div class="modal-description">
-                <p>This piece represents an exploration into the intersection of design and technology.</p>
-            </div>
-            <div class="modal-actions">
-                <button class="modal-button">View Full Project</button>
-                <button class="modal-button secondary">Share</button>
-            </div>
         </div>
     </div>
-</div>   
+</div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -1155,17 +1148,37 @@
     // Update all modal content
     document.getElementById('modalId').textContent = `ID ${project.id}`;
     document.getElementById('modalDate').textContent = project.date;
-    document.getElementById('modalSubtitle').textContent = `${project.title} - Creative Process`;
-            // Format views (1.2K format for large numbers)
-    const views = project.views > 1000 ? 
+    document.getElementById('modalTitle').textContent = project.title;
+    document.getElementById('modalViews').textContent = project.views > 1000 ? 
         (project.views / 1000).toFixed(1) + 'K' : project.views;
-    document.getElementById('modalViews').textContent = views;
-    
-    document.getElementById('modalLikes').textContent = project.likes;
+    document.getElementById('modalLikes').textContent = Math.floor(Math.random() * 500) + 50; // Random likes
     document.getElementById('modalCategory').textContent = project.category;
-            
-            modalOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    
+    // Rest of your gallery code...
+    currentImages = [];
+    for (let i = 0; i < project.images; i++) {
+        currentImages.push(`https://placehold.co/800x400/${Math.floor(Math.random()*16777215).toString(16)}/ffffff?text=Image+${i+1}`);
+    }
+    
+    currentImageIndex = 0;
+    galleryMainImg.src = currentImages[0];
+    
+    // Create thumbnails
+    galleryThumbs.innerHTML = '';
+    currentImages.forEach((img, index) => {
+        const thumb = document.createElement('div');
+        thumb.className = `gallery-thumb ${index === 0 ? 'active' : ''}`;
+        thumb.innerHTML = `<img src="${img}" alt="Thumbnail ${index + 1}">`;
+        thumb.addEventListener('click', () => {
+            currentImageIndex = index;
+            updateGallery();
+        });
+        galleryThumbs.appendChild(thumb);
+    });
+    
+    // Show modal
+    modalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
 }
 
         function closeModal() {
